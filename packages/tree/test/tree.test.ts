@@ -78,8 +78,7 @@ function witnessBatchMerge(hasher: Hasher) {
 }
 
 describe('Merkle Tree with Poseidon Hasher', function () {
-	const POSEIDON_PARAMETERS = {}; // use default
-	const hasher = newPoseidonHasher(POSEIDON_PARAMETERS);
+	const hasher = newPoseidonHasher();
 	it('insert', () => {
 		insertBatch(hasher);
 	}).timeout(5000);

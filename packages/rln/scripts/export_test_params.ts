@@ -1,4 +1,4 @@
-import { RLNWasm } from '@rln/circuit';
+import { RLNWasm } from 'rln-wasm-new';
 
 import * as fs from 'fs';
 import * as path from 'path';

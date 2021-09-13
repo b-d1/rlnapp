@@ -2,7 +2,6 @@ import * as chai from 'chai';
 import { ethers } from 'ethers';
 import { Tree, Data, newKeccakHasher } from '../src';
 import { LightSyncFS } from '../src/light-sync';
-import { newPoseidonHasher } from '../src/poseidon';
 const assert = chai.assert;
 
 function randLeaf(): Data {

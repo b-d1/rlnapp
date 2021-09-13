@@ -13,8 +13,7 @@ chai.use(chaiAsPromised);
 const BigNumber = ethers.BigNumber;
 const RLN_FACTORY = new RLN__factory(wallet);
 const POSEIDON_HASHER_FACTORY = new PoseidonHasher__factory(wallet);
-const POSEIDON_PARAMETERS = {}; // use default
-const HASHER = newPoseidonHasher(POSEIDON_PARAMETERS);
+const HASHER = newPoseidonHasher();
 
 const membershipDeposit = BigNumber.from(ethers.utils.parseEther('0.01'));
 

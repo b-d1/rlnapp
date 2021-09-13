@@ -1,4 +1,4 @@
-import { RLNWasm } from 'rln-wasm';
+import { RLNWasm } from 'rln-wasm-new';
 import { Tree, Hasher } from '@rln/tree';
 import { newPoseidonHasher, newKeccakHasher } from '@rln/tree';
 import * as ethers from 'ethers';
@@ -6,8 +6,7 @@ import { stringify } from 'querystring';
 import { FR, FP } from './ecc';
 const assert = require('assert');
 
-const POSEIDON_PARAMETERS = {}; // use default
-const poseidonHasher = newPoseidonHasher(POSEIDON_PARAMETERS);
+const poseidonHasher = newPoseidonHasher();
 const FR_SIZE = 32;
 const FP_SIZE = 32;
 const G1_SIZE = FP_SIZE * 2;
@@ -169,14 +168,12 @@ export class RLN {
 		return this.circuit.verify(proof, inputs);
 	}
 
-	public generate(tree: Tree, epoch: number, signal: string, target: string, key: string, memberIndex: number): RLNOut {
+	public generate(tree: Tree, epoch: number, signal: string, key: string, memberIndex: number): RLNOut {
 		// signal
-		const targetAddress = ethers.utils.getAddress(target);
 		const signalHash1 = ethers.utils.solidityKeccak256(['string'], [signal]);
-		const signalHash2 = ethers.utils.solidityKeccak256(['address', 'bytes32'], [targetAddress, signalHash1]);
 
 		// TODO: we likely to change hash to field
-		const x = FR.e(signalHash2);
+		const x = FR.e(signalHash1);
 
 		const a0 = FR.e(key);
 		const _epoch = FR.e(epoch);
@@ -218,11 +215,14 @@ export class RLN {
 		FR.toRprLE(input, 4 * FR_SIZE, _root);
 		FR.toRprLE(input, 5 * FR_SIZE, a0);
 
+
 		serializedAuthPath.copy(input, 6 * FR_SIZE);
 
 		if (this._logTime) {
 			console.time('prover');
 		}
+
+
 		const proof = this.circuit.generate_proof(input);
 		if (this._logTime) {
 			console.timeEnd('prover');

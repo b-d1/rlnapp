@@ -1,7 +1,5 @@
 import { ethers } from 'ethers';
 
-const poseidon = require('@rln/poseidon').poseidon;
-
 export type Node = string;
 
 const ZERO = '0x0000000000000000000000000000000000000000000000000000000000000000';
