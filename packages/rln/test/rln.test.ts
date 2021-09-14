@@ -6,10 +6,7 @@ import * as chai from 'chai';
 import { newPoseidonHasher } from '@rln/tree';
 const Scalar = require('ffjavascript').Scalar;
 const ZqField = require('ffjavascript').ZqField;
-const buildBn128 = require('ffjavascript').buildBn128;
 const assert = chai.assert;
-
-
 
 const DEPTH = 4;
 const hasher = newPoseidonHasher();
@@ -22,10 +19,10 @@ function randAddress(): string {
 	return ethers.utils.getAddress(ethers.utils.hexlify(ethers.utils.randomBytes(20)));
 }
 
+// Used only for testing purposes
 function createPrivateKey() {
 	return '0x' + FR.random().toString(16);
 }
-
 
 function initRLN(depth) {
 	var fs = require('fs');
@@ -38,15 +35,13 @@ function initRLN(depth) {
 
 
 function reconstructSecret(x1: string, y1: string, x2: string, y2: string) {
-	/**
-	 * Find slope from shares and calculate private key (the free coefficient a0).
-	 */ 
-
+	// Find slope from shares and calculate private key (the free coefficient a0).
 
 	const x1Fr = FR.e(x1);
 	const x2Fr = FR.e(x2);
 	const y1Fr = FR.e(y1);
 	const y2Fr = FR.e(y2);
+
 	const slope = FR.div(FR.sub(y2Fr, y1Fr), FR.sub(x2Fr, x1Fr))
 	const pkey = FR.sub(y1Fr, FR.mul(slope, x1Fr));
 	return RLNUtils.frToHex(pkey)

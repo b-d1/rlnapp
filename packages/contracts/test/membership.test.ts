@@ -1,19 +1,18 @@
 import { assert } from "chai";
 import {
   RLN__factory,
-  RLN,
-  PoseidonHasher,
-  PoseidonHasher__factory,
+  RLN
 } from "../wrappers";
 
 import { ethers } from "hardhat";
 import { newPoseidonHasher } from "@rln/tree";
 import { Signer, ethers as _ethers } from "ethers";
 import { expectRevert } from "./utils";
+const poseidonUnit = require("circomlib/src/poseidon_gencontract");
 
 const BigNumber = ethers.BigNumber;
 
-const poseidon = newPoseidonHasher({});
+const poseidon = newPoseidonHasher();
 
 const depth = 32;
 const membershipDeposit = BigNumber.from(ethers.utils.parseEther("0.01"));
@@ -28,16 +27,23 @@ function randAddr() {
 }
 
 describe("Membership", () => {
-  let poseidonHasher: PoseidonHasher;
+  let poseidonHasher: any
   let RLN: RLN;
   let deployer: Signer;
   let provider;
   before(async () => {
     const accounts = await ethers.getSigners();
     deployer = accounts[0];
-    const poseidonHasherFactory = new PoseidonHasher__factory(deployer);
-    poseidonHasher = await poseidonHasherFactory.deploy();
+    
+    const poseidonOneInputABI = poseidonUnit.generateABI(1);
+    const poseidonOneInputCode = poseidonUnit.createCode(1);
+
+    const poseidonOneInputFactory = new ethers.ContractFactory(poseidonOneInputABI, poseidonOneInputCode, deployer);
+
+    poseidonHasher = await poseidonOneInputFactory.deploy();
     provider = poseidonHasher.provider;
+
+
   });
 
   beforeEach(async () => {

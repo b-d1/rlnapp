@@ -1,5 +1,3 @@
-import { ethers } from 'ethers';
-
 export type Node = string;
 
 const ZERO = '0x0000000000000000000000000000000000000000000000000000000000000000';

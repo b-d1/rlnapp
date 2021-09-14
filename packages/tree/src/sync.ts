@@ -2,7 +2,7 @@ import { Tree } from './tree';
 import { Provider } from '@ethersproject/providers';
 import { ethers } from 'ethers';
 import { Hasher } from './hasher';
-import { PoseidonHasher__factory, RLN, RLN__factory } from './contracts';
+import { RLN, RLN__factory } from './contracts';
 import { FormatTypes } from 'ethers/lib/utils';
 const assert = require('assert');
 
@@ -12,9 +12,6 @@ export class TreeSync {
 	// TODO: add option to boot from a milestone
 	static async new(hasher: Hasher, rlnAddress: string, provider: Provider): Promise<TreeSync> {
 		const rln = RLN__factory.connect(rlnAddress, provider);
-		const poseidonHasherAddress = await rln.poseidonHasher();
-		const PoseidonHasher = PoseidonHasher__factory.connect(poseidonHasherAddress, provider);
-		assert(hasher.identity == (await PoseidonHasher.identity()).toHexString());
 		const depth = (await rln.DEPTH()).toNumber();
 		const tree = Tree.new(depth, hasher);
 		const memberSize = (await rln.pubkeyIndex()).toNumber();

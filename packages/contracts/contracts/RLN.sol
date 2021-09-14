@@ -1,6 +1,7 @@
 pragma solidity 0.7.4;
 
-import { IPoseidonHasher } from "./crypto/PoseidonHasher.sol";
+import "./crypto/IPoseidonHasher.sol";
+
 
 contract RLN {
 	uint256 public immutable MEMBERSHIP_DEPOSIT;
@@ -78,7 +79,7 @@ contract RLN {
 		require(receiver != address(0), "RLN, _withdraw: empty receiver address");
 
 		// derive public key
-		uint256 pubkey = hash([secret, 0]);
+		uint256 pubkey = hash([secret]);
 		require(members[_pubkeyIndex] == pubkey, "RLN, _withdraw: not verified");
 
 		// delete member
@@ -90,7 +91,7 @@ contract RLN {
 		emit MemberWithdrawn(pubkey, _pubkeyIndex);
 	}
 
-	function hash(uint256[2] memory input) internal view returns (uint256) {
-		return poseidonHasher.hash(input);
+	function hash(uint256[1] memory input) internal view returns (uint256) {
+		return poseidonHasher.poseidon(input);
 	}
 }

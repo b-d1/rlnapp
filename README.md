@@ -1,8 +1,8 @@
-# Rate Limit Nullifier App
+# Rate Limit Nullifier App PoC
 
-This is the development repo of rate limit nullifier messenger prototype application.
+This app is improvement over: https://github.com/kilic/rlnapp and features the RLN circuits with canonical Poseidon hasher implementation, implemented here: https://github.com/bdim1/rln.
 
-For details, see work in progress document [here](https://hackmd.io/tMTLMYmTR5eynw2lwK9n1w?both).
+It also adds an additional tests to simulate slashing.
 
 ## Workflow
 

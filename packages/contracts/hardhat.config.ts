@@ -4,9 +4,7 @@ module.exports = {
   defaultNetwork: "hardhat",
   networks: {
     hardhat: {
-      chainId: 1004,
-      throwOnCallFailures: false,
-      throwOnTransactionFailures: false,
+      chainId: 31337
     },
   },
   solidity: {

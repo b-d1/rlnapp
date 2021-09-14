@@ -1,15 +1,24 @@
 pragma solidity 0.7.4;
 
-import "../crypto/PoseidonHasher.sol";
+import "../crypto/IPoseidonHasher.sol";
 
-contract TestPoseidon is PoseidonHasher {
-	function test(uint256[2] calldata input) external pure returns (uint256) {
-		return _hash(input);
+contract TestPoseidon {
+
+	IPoseidonHasher public poseidonHasher;
+
+	constructor(
+		address _poseidonHasher
+	) public {
+		poseidonHasher = IPoseidonHasher(_poseidonHasher);
+	}
+
+	function test(uint256[1] calldata input) external view returns (uint256) {
+		return poseidonHasher.poseidon(input);
 	}
 
 	function poseidonGasCost() external returns (uint256) {
 		uint256 g = gasleft();
-		_hash([uint256(1), uint256(2)]);
+		poseidonHasher.poseidon([uint256(1)]);
 		return g - gasleft();
 	}
 }

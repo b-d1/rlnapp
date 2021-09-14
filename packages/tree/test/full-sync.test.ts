@@ -3,16 +3,17 @@ import { wallet, provider, downProvider } from './provider';
 
 import { utils, ethers } from 'ethers';
 import { TreeSync } from '../src/sync';
-import { PoseidonHasher__factory, RLN, RLN__factory } from '../src/contracts';
+import { RLN, RLN__factory } from '../src/contracts';
 
 const chai = require('chai');
 const assert = chai.assert;
 const chaiAsPromised = require('chai-as-promised');
+const poseidonUnit = require("circomlib/src/poseidon_gencontract");
+
 chai.use(chaiAsPromised);
 
 const BigNumber = ethers.BigNumber;
 const RLN_FACTORY = new RLN__factory(wallet);
-const POSEIDON_HASHER_FACTORY = new PoseidonHasher__factory(wallet);
 const HASHER = newPoseidonHasher();
 
 const membershipDeposit = BigNumber.from(ethers.utils.parseEther('0.01'));
@@ -27,9 +28,16 @@ function randPubkey(): string {
 
 let poseidonHasherAddress;
 async function deployPoseidonHasher() {
-	let poseidonHasher = await POSEIDON_HASHER_FACTORY.deploy();
-	await poseidonHasher.deployTransaction.wait();
-	poseidonHasherAddress = poseidonHasher.address;
+
+    
+    const poseidonOneInputABI = poseidonUnit.generateABI(1);
+    const poseidonOneInputCode = poseidonUnit.createCode(1);
+
+    const poseidonOneInputFactory = new ethers.ContractFactory(poseidonOneInputABI, poseidonOneInputCode, wallet);
+    const poseidonHasherOneInput = await poseidonOneInputFactory.deploy();
+
+
+	poseidonHasherAddress = poseidonHasherOneInput.address;
 }
 
 async function deployRLN(depth: number): Promise<RLN> {
